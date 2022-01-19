@@ -22,6 +22,19 @@ class OverLoad {
 			number = num;
 		}
 
+		
+
+		OverLoad OperatorPlus(OverLoad const& obj)
+		{
+			OverLoad tmp;
+			tmp.number = this->number + obj.number;
+			return tmp;
+		}
+
+
+		// In my story about Operator overload, the intersting thing was that we had an operator overload on a "++" on a parent class that people
+		// The object that might be called employeeObj that was of time Employee was actually part of one or many different sets. Whenever you did
+		// a ++, it would increment
 		OverLoad operator + (OverLoad const& obj)
 		{
 			OverLoad tmp;
@@ -29,9 +42,10 @@ class OverLoad {
 			return tmp;
 		}
 
+
 		void print()
 		{
-			cout << "Object val is  " << number;
+			cout << "Overload value is  " << number << endl;
 		}
 
 };
@@ -216,7 +230,7 @@ double add(double a, double b)
 
 int addreturnint(int a, int b)
 {
-	printf("A is %d\n", a);
+	//printf("A is %d\n", a);
 	return a + b;
 }
 
@@ -227,7 +241,11 @@ int main()
 	srand(time(0));
 
 	// Will be opening my database. Don't really care, as from our perspective it is all the same
-	for (int i = 0; i < 10; i++)
+	printf("We will be demonstrating Inclusion Polymorphism (Runtime\n");
+	printf("We will be creating a Database to one of three types, and using a base pointer\n");
+	printf("To call into the various methods (OpenDatabase and CloseDatabase\n\n");
+
+	for (int i = 0; i < 5; i++)
 	{
 		// We will be getting a database. Who know's where it is coming from
 		DatabaseConnect* pConnxDb = DatabaseFactory::RandomDatabaseConnnect();
@@ -239,6 +257,7 @@ int main()
 
 		// Log it, show the Error Status and print a couple of blank lines
 		pConnxDb->Log();
+		printf("about to log with file\n");
 		pConnxDb->Log("log.txt");
 		pConnxDb->ErrorStatus();
 		printf("\n\n");
@@ -251,21 +270,40 @@ int main()
 	// Operator Overload
 	OverLoad a1(10), a2(5);
 	OverLoad a3 = a1 + a2;
+
+	printf("Operater Overload Example. We will be overloading the + operator\n");
 	a3.print();
+	// This line is added to take away the mystery that Operator overload
+	// could have easily been a function
+	printf("We are calling a function instead of overloading the + operator. Results should be same\n");
+	OverLoad a4 = a1.OperatorPlus(a2);
+	a4.print();
 
-
-	cout << myMax<int>(3, 7) << endl;  // Call myMax for int
-	cout << myMax<double>(3.0, 7.0) << endl; // call myMax for double
-	cout << myMax<char>('g', 'e') << endl;   // call myMax for char
+	printf("\n\n");
+	printf("Template Example. We have three different types\n\n");
+	cout << "Example 1 should be 7 as it greatest of (3,7): " << myMax<int>(3, 7) << endl;  // Call myMax for int
+	cout << "Example 2 should be 7.42 as it is greatest of (3.5,7.42) " << myMax<double>(3.5, 7.42) << endl; // call myMax for double
+	cout << "Example 3 should be 'g' as it is greatest of ('g','e') " << myMax<char>('g', 'e') << endl;   // call myMax for char
 
 		// Passing double arguments, as expected
+
+	printf("\n\n");
+	printf("Method Overloading - Ad hoc Polymorphism\n");
+
+	printf("We are calling a special add function that takes doubles.\n");
+	printf("We are passing 2.4 and 8.5 and expecting to see 10.9\n");
 	cout << "Sum = " << add(2.4, 8.5) << endl;
 
-	// Passing int arguments, when double is expected
-	// This will lead to Argument Coercion
+	printf("We are calling a special add function that takes doubles.\n");
+	printf("We are passing 16 and 18 and expecting to see 34\n");
 	cout << "Sum = " << add(16, 18) << endl;
 
-	cout << "Sum = " << addreturnint(2.5, 5.54334) << endl;
+
+	// Passing int arguments, when double is expected
+	// This will lead to Coercion Polymorphism
+	printf("\n\nCoercion Polymorphism\n");
+	printf("We are passing 2.1 and 5.6 and are expecting to see a 7\n");
+	cout << "We return an Integer: Answer = " << addreturnint(2.1, 5.6) << endl;
 
 
 }
